@@ -144,3 +144,67 @@ element 3
 Free
 Top
 p3
+
+Ex 6
+Make your original program and confirm that function pointer can be use in function parameter.(Find any effective case. )
+Say in other words,
+(1) Make the main routine and any subroutines.
+(2) Declare function pointer in the main routine.
+(3) Call subroutine1 which has function pointer argument.
+(4) Call subroutine2 by function pointer.
+
+Read following explanation and make a program.
+There is a mathematical game which named guessNumber:
+How to play the game
+Computer creates the 4 digits random number (target number), each digit character is different from other digits, and it's hidden from game player.
+Player must find target number with some hints.
+At first, player must guess the target number and answer to the computer.
+If player's answer is not correct, computer gives some hints.
+And player must guess the number again from the hints. (repeat)
+Finally player will find target number.
+
+E 1
+Make following subroutine and debug by HEW simulator.
+int isMatch(char target[], char num[]);
+This function compares 2 argument and check hit count and blow count,
+and replies TRUE or FALSE.
+1st argument is target number and 2nd argument is guess number.
+Both are 4 byte character string.
+Hit count and blow count are displayed by printf.
+When target number and guess number is same, function returns TRUE.
+When target number and guess number is different, function returns FALSE.
+
+E 2
+Make following subroutine and debug by HEW simulator.
+int isValidNumber(char num[]);
+This function check if "num"(4 digit number string) is valid or not.
+If each digit character is different from other digits, return TRUE.
+If one of digit character and other digit character is same, return FALSE.
+Example:
+When "num" is "2661"
+The function returns FALSE. (There are two '6' in the 4 digit.)
+When "num" is "0523"
+The function returns TRUE.
+
+E 3
+Make subroutine and debug by HEW simulator.
+void createRandomNumber(char num[]);
+This function creates the 4 digits random number.
+Each digit character is different from other digits.
+Created number is returned with parameter.
+Notice
+In the HEW simulator, The function rand() replies same answer every time.
+So, use another way. For example, player input any number and computer
+modify the input number and make the 4 digits random number.
+Add your original invention.
+
+E 4
+All subroutines are prepared in Exercise 1, 2, 3.
+Make main routine and debug by HEW simulator.
+Test your program and complete the GuessNumber program.
+Make a pair with another person, and check your partner's program each other.
+(1) Is your partner's program satisfy the specification?
+When you find bad point in the program, make your partner correct them.
+Don't correct your partner's program but tell him bad point.
+(2) Find good point of your partner's program.
+(3) Find weak point of your partner's program.
