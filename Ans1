@@ -406,15 +406,15 @@ int main(void)
     a = isMatch(target, num);
     if (a == 4)
     {
-        printf ("Correct!");
+        printf ("\nCorrect!");
     }
     else if (a >= 1)
     {
-        printf ("Almost correct!");
+        printf ("\nAlmost correct!");
     }
     else
     {
-        printf ("Incorrect!");
+        printf ("\nIncorrect!");
     }
 }
 
@@ -449,6 +449,7 @@ int isMatch(char *target, char *num)
 {
     int i;
     int hit = 0;
+    int blow = 0;
     int j;
     int a;
     for (i = 0; i < 4; i++)
@@ -470,5 +471,5 @@ int isMatch(char *target, char *num)
     {
         a = 4;
     }
-    return hit;
+    return a;
 }
