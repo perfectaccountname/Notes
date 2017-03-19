@@ -1,0 +1,474 @@
+****
+4-1
+****
+
+#define NULL ((void*)0)
+#include <stdio.h>
+
+struct leaf {
+    char data[16]; /* string data */
+    struct leaf *next; /* pointer to the next leaf */
+};
+
+struct leaf *addLeaf(char*, struct leaf *);
+struct leaf *insertLeaf(char*, struct leaf *, int);
+void printLeaves(struct leaf *p);
+void freeLeaves(struct leaf *p);
+int main(void)
+{
+    int pos;
+    char name[16];
+    printf ("Please insert new element's name: \n");
+    scanf("%s", &name);
+    printf ("Please insert new element's position: \n");
+    scanf("%d", &pos);
+    struct leaf *top; /* top of the leaves */
+    char *fruits[4] = {"apple", "orange", "banana", name} ;
+    top = NULL;
+    top = addLeaf(fruits[0], top);
+    top = addLeaf(fruits[1], top);
+    top = addLeaf(fruits[2], top);
+    insertLeaf(fruits[3], top, pos);
+    printLeaves(top); /* print elements*/
+    freeLeaves(top); /* delete all elements */
+}
+
+void printLeaves(struct leaf *pL)
+{
+    while (pL != NULL) {
+        printf("%s\n", pL->data);
+        pL = pL->next;
+    }
+}
+
+struct leaf *addLeaf(char *data, struct leaf *top)
+{
+    struct leaf *pL;
+    pL = (struct leaf*) malloc(sizeof(struct leaf));
+    strcpy(pL->data, data);
+    /* change pointer to the top */
+    pL->next = top; /* Old top is new leaf's next */
+    top = pL;/* New top is new leaf's address */
+    return top;
+}
+
+struct leaf *insertLeaf(char *data, struct leaf *top, int pos)
+{
+    int count = 0;
+    struct leaf *pTail;
+    struct leaf *pL;
+    pL = (struct leaf*) malloc(sizeof(struct leaf));
+    strcpy(pL->data, data);
+    if (pos == 0)
+    {
+        /* change pointer to the top */
+        pL->next = top; /* Old top is new leaf's next */
+        top = pL; /* New top is new leaf's address */
+    }
+    else
+    {
+        while (count != pos)
+        {
+            pTail  = top;
+            top = top->next;
+            count++;
+        }
+        /*change pointer to the top */
+        pTail->next = pL;
+        pL->next = top; /* Old top is new leaf's next */
+        top = pL; /* New top is new leaf's address */
+    }
+}
+
+void freeLeaves(struct leaf *pL)
+{
+    struct leaf *pLnext;
+    while (pL != NULL) {
+        pLnext = pL->next;
+        free(pL);
+        pL = pLnext;
+    }
+}
+
+*****
+4-2-1
+*****
+
+#define NULL ((void*)0)
+#include <stdio.h>
+
+struct leaf {
+    char data[16]; /* string data */
+    struct leaf *next; /* pointer to the next leaf */
+};
+
+struct leaf *addLeaf(char*, struct leaf *);
+struct leaf *insertLeaf(char*, struct leaf *, int);
+struct leaf *removeLeaf(struct leaf *);
+void printLeaves(struct leaf *p);
+void freeLeaves(struct leaf *p);
+int main(void)
+{
+    int pos;
+    char name[16];
+    //printf ("Please insert new element's name: \n");
+    //scanf("%s", &name);
+    //printf ("Please insert new element's position: \n");
+    //scanf("%d", &pos);
+    struct leaf *top; /* top of the leaves */
+    char *fruits[4] = {"apple", "orange", "banana", "grape"} ;
+    top = NULL;
+    top = addLeaf(fruits[0], top);
+    top = addLeaf(fruits[1], top);
+    top = addLeaf(fruits[2], top);
+    top = addLeaf(fruits[3], top);
+    //insertLeaf(fruits[3], top, pos);
+    removeLeaf (top);
+    printLeaves(top); /* print elements*/
+    freeLeaves(top); /* delete all elements */
+}
+
+void printLeaves(struct leaf *pL)
+{
+    while (pL != NULL) {
+        printf("%s\n", pL->data);
+        pL = pL->next;
+    }
+}
+
+struct leaf *addLeaf(char *data, struct leaf *top)
+{
+    struct leaf *pL;
+    pL = (struct leaf*) malloc(sizeof(struct leaf));
+    strcpy(pL->data, data);
+    /* change pointer to the top */
+    pL->next = top; /* Old top is new leaf's next */
+    top = pL;/* New top is new leaf's address */
+    return top;
+}
+
+struct leaf *insertLeaf(char *data, struct leaf *top, int pos)
+{
+    int count = 0;
+    struct leaf *pTail;
+    struct leaf *pL;
+    pL = (struct leaf*) malloc(sizeof(struct leaf));
+    strcpy(pL->data, data);
+    if (pos == 0)
+    {
+        /* change pointer to the top */
+        pL->next = top; /* Old top is new leaf's next */
+        top = pL; /* New top is new leaf's address */
+    }
+    else
+    {
+        while (count != pos)
+        {
+            pTail  = top;
+            top = top->next;
+            count++;
+        }
+        /*change pointer to the top */
+        pTail->next = pL;
+        pL->next = top; /* Old top is new leaf's next */
+        top = pL; /* New top is new leaf's address */
+    }
+}
+
+struct leaf *removeLeaf(struct leaf *top)
+{
+    struct leaf *pL;
+    pL = top->next;
+    top->next = top->next->next;
+    free(pL);
+}
+
+void freeLeaves(struct leaf *pL)
+{
+    struct leaf *pLnext;
+    while (pL != NULL) {
+        pLnext = pL->next;
+        free(pL);
+        pL = pLnext;
+    }
+}
+
+*********
+4-2-2
+*********
+
+#define NULL ((void*)0)
+#include <stdio.h>
+
+struct leaf {
+    char data[16]; /* string data */
+    struct leaf *next; /* pointer to the next leaf */
+};
+
+struct leaf *addLeaf(char*, struct leaf *);
+struct leaf *insertLeaf(char*, struct leaf *, int);
+struct leaf *removeLeaf(struct leaf *, int);
+void printLeaves(struct leaf *p);
+void freeLeaves(struct leaf *p);
+int main(void)
+{
+    int pos;
+    char name[16];
+    int rpos;
+    printf ("Please insert position to remove: \n");
+    scanf("%d", &rpos);
+    //printf ("Please insert new element's name: \n");
+    //scanf("%s", &name);
+    //printf ("Please insert new element's position: \n");
+    //scanf("%d", &pos);
+    struct leaf *top; /* top of the leaves */
+    char *fruits[4] = {"apple", "orange", "banana", "grape"} ;
+    top = NULL;
+    top = addLeaf(fruits[0], top);
+    top = addLeaf(fruits[1], top);
+    top = addLeaf(fruits[2], top);
+    top = addLeaf(fruits[3], top);
+    //insertLeaf(fruits[3], top, pos);
+    removeLeaf (top, rpos);
+    printLeaves(top); /* print elements*/
+    freeLeaves(top); /* delete all elements */
+}
+
+void printLeaves(struct leaf *pL)
+{
+    while (pL != NULL) {
+        printf("%s\n", pL->data);
+        pL = pL->next;
+    }
+}
+
+struct leaf *addLeaf(char *data, struct leaf *top)
+{
+    struct leaf *pL;
+    pL = (struct leaf*) malloc(sizeof(struct leaf));
+    strcpy(pL->data, data);
+    /* change pointer to the top */
+    pL->next = top; /* Old top is new leaf's next */
+    top = pL;/* New top is new leaf's address */
+    return top;
+}
+
+struct leaf *insertLeaf(char *data, struct leaf *top, int pos)
+{
+    int count = 0;
+    struct leaf *pTail;
+    struct leaf *pL;
+    pL = (struct leaf*) malloc(sizeof(struct leaf));
+    strcpy(pL->data, data);
+    if (pos == 0)
+    {
+        /* change pointer to the top */
+        pL->next = top; /* Old top is new leaf's next */
+        top = pL; /* New top is new leaf's address */
+    }
+    else
+    {
+        while (count != pos)
+        {
+            pTail  = top;
+            top = top->next;
+            count++;
+        }
+        /*change pointer to the top */
+        pTail->next = pL;
+        pL->next = top; /* Old top is new leaf's next */
+        top = pL; /* New top is new leaf's address */
+    }
+}
+
+struct leaf *removeLeaf(struct leaf *top, int rpos)
+{
+    struct leaf *pL;
+    int count = 0;
+    if (rpos == 0)
+    {
+        pL = top->next;
+        free(top);
+        top = pL;
+        return top;
+    }
+    else
+    {
+        while (count < rpos-1)
+        {
+        top = top->next;
+        count ++;
+        }
+    pL = top->next;
+    top->next = top->next->next;
+    free(pL);
+    }
+}
+
+void freeLeaves(struct leaf *pL)
+{
+    struct leaf *pLnext;
+    while (pL != NULL) {
+        pLnext = pL->next;
+        free(pL);
+        pL = pLnext;
+    }
+}
+
+**********
+6
+********
+
+#define NULL ((void*)0)
+#include <stdio.h>
+#include <stdlib.h>
+
+void *create(int*);
+void show(int*);
+int main()
+{
+    int a[10];
+    show(create(a));
+    return(0);
+}
+void *create(int *a)
+{
+    int i;
+    srand (time(NULL));
+    for (i=0;i<10;i++)
+    {
+        a[i] = rand() % 10;
+    }
+    return a;
+}
+
+void show(int *a)
+{
+    int i;
+    for (i=0;i<10;i++)
+    {
+        printf ("%d\n", a[i]);
+    }
+}
+
+**********
+Gue
+*********
+
+#define NULL ((void*)0)
+#include <stdio.h>
+#include <stdlib.h>
+#define NUMLEN 4
+int isMatch(char*, char*);
+int isValidNumber(char*);
+void *createRandomNumber(char*);
+
+int main(void)
+{
+    int i = 0;
+    int a = 0;
+    /* Target on top of Num? */
+    char num[NUMLEN];
+    char target[NUMLEN];
+    //unsigned r;
+    //printf ("Please insert a seed to generate random numbers: ", r);
+    //scanf ("%u", &r);
+    srand (time(NULL));
+    while (i == 0)
+    {
+        i = isValidNumber(createRandomNumber(target));
+    }
+    printf ("Psst! The number is: ");
+    for (i = 0;i < NUMLEN; i++)
+    {
+        printf ("%d", target[i]);
+    }
+    printf ("\n");
+    while (a == 0)
+    {
+        for(i = 0; i < NUMLEN; i++)
+        {
+            printf("Enter a Number: ");
+            scanf("%d", &num[i]);
+        }
+        a = isValidNumber(num);
+        if (a == 0)
+        {
+            printf("Invalid inputs! Duplicate numbers. Please try again \n");
+        }
+    }
+
+    for (i = 0; i < NUMLEN; i++)
+    {
+        printf ("%d", num[i]);
+    }
+
+    a = isMatch(target, num);
+    if (a == 4)
+    {
+        printf ("Correct!");
+    }
+    else if (a >= 1)
+    {
+        printf ("Almost correct!");
+    }
+    else
+    {
+        printf ("Incorrect!");
+    }
+}
+
+void *createRandomNumber(char *target)
+{
+    int i;
+    for (i = 0;i < 4; i++)
+    {
+        target[i] = rand() % 10;
+    }
+    return target;
+}
+
+int isValidNumber(char *target)
+{
+    int i;
+    int j;
+    for (i = 0; i < 4; i++)
+    {
+        for (j = i + 1; j < 4; j++)
+        {
+            if (target[i] == target[j])
+            {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
+int isMatch(char *target, char *num)
+{
+    int i;
+    int hit = 0;
+    int j;
+    int a;
+    for (i = 0; i < 4; i++)
+    {
+        if (target[i] == num[i])
+        {
+            hit++;
+        }
+    }
+    if (0 == hit)
+    {
+        a = 0;
+    }
+    else if (hit < 4)
+    {
+        a = 1;
+    }
+    else
+    {
+        a = 4;
+    }
+    return hit;
+}
