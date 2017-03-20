@@ -404,13 +404,14 @@ int main(void)
     }
 
     a = isMatch(target, num);
-    if (a == 4)
+    if (8 == a)
     {
         printf ("\nCorrect!");
     }
-    else if (a >= 1)
+    else if (a > 0 && a < 8)
     {
         printf ("\nAlmost correct!");
+        printf ("\nType: %d", a);
     }
     else
     {
@@ -448,28 +449,61 @@ int isValidNumber(char *target)
 int isMatch(char *target, char *num)
 {
     int i;
+    int j;
     int hit = 0;
     int blow = 0;
-    int j;
-    int a;
     for (i = 0; i < 4; i++)
     {
-        if (target[i] == num[i])
+        for (j = 0; j < 4; j++)
         {
-            hit++;
+            if (j == i && target[i] == num[j])
+            {
+                hit++;
+            }
+            else if (j != i && target[i] == num[j])
+            {
+                blow++;
+            }
+            else
+            {
+                continue;
+            }
         }
     }
-    if (0 == hit)
+    if (0 == hit && 0 == blow)
     {
-        a = 0;
+        return 0;
     }
-    else if (hit < 4)
+    else if (0 == hit && 1 == blow)
     {
-        a = 1;
+        return 1;
+    }
+    else if (0 == hit && 2 == blow)
+    {
+        return 2;
+    }
+    else if (0 == hit && 3 == blow)
+    {
+        return 3;
+    }
+    else if (0 == hit && 4 == blow)
+    {
+        return 4;
+    }
+    else if (1 == hit && 3 == blow)
+    {
+        return 5;
+    }
+    else if (2 == hit && 2 == blow)
+    {
+        return 6;
+    }
+    else if (3 == hit && 1 == blow)
+    {
+        return 7;
     }
     else
     {
-        a = 4;
+        return 8;
     }
-    return a;
 }
