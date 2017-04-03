@@ -1,0 +1,68 @@
+int main(void)
+{
+    int swt1 = 0;
+    int swt2 = 0;
+    int swt3 = 0;
+    int state = 0;
+    while (1)
+    {
+        if (P1 && swt1 != 1)
+        {
+            swt1 = ~swt1;
+        }
+        if (P2 && swt2 != 1)
+        {
+            swt2 = ~swt2;
+        }
+        if (P3 && swt3 != 1)
+        {
+            swt3 = ~swt3;
+        }
+        
+        Delay;
+        
+        switch (swt1)
+        {
+            case 0:
+            break;
+            case 255:
+            second++;
+            swt1 = ~swt1;
+            break;
+        }
+        
+        switch (swt2)
+        {
+            case 0:
+            break;
+            case 255:
+            {
+                    switch (swt3)
+                    {
+                        case 0:
+                            minute++;
+                            swt2 = ~swt2;
+                            break;
+                        case 255:
+                            minute = 0;
+                            second = 0;
+                            swt2 = ~swt2;
+                            break;
+                    }
+            }
+            break;
+        }
+        
+        switch (swt3)
+        {
+            case 0:
+            state = 1; //Paused
+            break;
+            case 255:
+                state = 2; //Counting
+                minute--;
+                second--;
+        }
+        printf();
+    }
+}
