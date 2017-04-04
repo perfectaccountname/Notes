@@ -1,0 +1,42 @@
+Embedded Software Final Exercise – Level 1 Page 1
+Level 1: Count-Down Timer
+0. Prerequisites
+ Attended the training on Embedded Software
+1. Input
+ RL78/G14 RDK board
+ CubeSuite+ E2.02.00I
+ StarUML
+ Workspace: Common Workspace  Final Exercise  L1 (empty)
+ Requirements for this level (see Requirements below)
+2. Output
+ Sequence diagram (using StarUML)
+ State transition diagram for switches (draw it before writing code)
+ Source code
+3. Task Description
+You are going to write a program simulating the function of a count-down timer. You will be using the 3 switches on the board to set the time and start/pause/resume/reset the timer. The time is displayed on LCD device and your final program will show something like the following:
+4. Requirements
+Detailed requirements of this task are described as below.
+4.1 LCD display
+ The first line of the LCD display will show a message which is:
+o “Setting…” when the system has just been reset or when the timer has just finished counting
+o “Counting…” when the timer is counting down
+o “Paused…” when the timer is in pausing state (see requirement 4.2)
+ The second line of the LCD display will show the time in the format of XX:XX
+o If the system has just been reset, this line will display 00:00
+Embedded Software Final Exercise – Level 1 Page 2
+4.2 Switches (SW)
+ SW1 is used to set the second that varies from 0 to 59. When it is pressed, the second is incremented by 1.
+ SW2 is used to set the minute that varies from 0 to 59. When it is pressed, the minute is incremented by 1.
+ SW3 is used to:
+o Start the timer to count down if the set time is not 0 (e.g. 00:00)
+o Pause the timer if it is counting down
+o Resume the timer if it is being paused
+ While the timer is in pausing state:
+o If SW2 is pressed, the timer will be reset (e.g. 00:00)
+ Chattering has to be eliminated (review Chapter 7).
+4.3 Time management
+In this level 1, you are required to use “software way” to manage the time (review Chapter 6).
+ Write a C function that manages the time.
+ The above C function has an option which allows switching between using C code and assembly code to manage the time.
+Recommendation: After having done this requirement 4.3, you should test both cases (C vs. assembly code) to compare their performance (which one is more accurate?).
+---END---
