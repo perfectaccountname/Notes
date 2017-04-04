@@ -1,0 +1,219 @@
+/******************************************************************************
+Includes   <System Includes> , "Project Includes"
+******************************************************************************/
+#include "r_macro.h"  /* System macro and standard type definition */
+#include "r_spi_if.h" /* SPI driver interface */
+#include "lcd.h"      /* LCD driver interface */
+#include "Port.h"
+#include <string.h>
+#include "ChatDel.h"
+
+/******************************************************************************
+Typedef definitions
+******************************************************************************/
+volatile int G_elapsedTime = 0;   // Timer Counter
+/******************************************************************************
+Macro definitions
+******************************************************************************/
+#define STATE0 0 // Setting...
+#define STATE1 1 // Counting...
+#define STATE2 2 // Paused...
+
+#define SWT1 0x40
+#define SWT2 0x10
+#define SWT3 0x20
+/******************************************************************************
+Imported global variables and functions (from other files)
+******************************************************************************/
+
+/******************************************************************************
+Exported global variables and functions (to be accessed by other files)
+******************************************************************************/
+unsigned int second = 50;
+unsigned int minute = 0;
+
+unsigned int match = 0;
+unsigned int prev = 0x70;
+unsigned int read = 0x70;
+unsigned int final = 0;
+unsigned int prevfinal = 0;
+/******************************************************************************
+Private global variables and functions
+******************************************************************************/
+void r_main_userinit(void);
+void checkswitch(void);
+char * string_shown_on_lcd[10];
+volatile unsigned int swt1 = 0;
+volatile unsigned int swt2 = 0;
+volatile unsigned int swt3 = 0;
+volatile unsigned int state = 3;
+unsigned int button = 0;
+unsigned int state = 0;
+
+/******************************************************************************
+* Function Name: main
+* Description  : Main program
+* Arguments    : none
+* Return Value : none
+******************************************************************************/
+void main(void)
+{
+	/* Initialize user system */
+	r_main_userinit();
+
+	/* Clear LCD display */
+	ClearLCD();
+
+	/* Print message to the first line of LCD */
+	//DisplayLCD(LCD_LINE1, (uint8_t *)"Hello World!");
+
+	DisplayLCD(LCD_LINE1, "Setting...");
+	sprintf(string_shown_on_lcd, "%2d:%2d", minute, second);
+	DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+
+	/* Main loop - Infinite loop */
+	while (1)
+	{
+		checkswitch()
+		if (state = STATE1)
+		{
+            Wait1MiliSecond();
+            G_elapsedTime++;
+            if (G_elapsedTime >= 1000)
+            {
+                second--;
+                G_elapsedTime = G_elapsedTime - 1000;
+                if (second < 0 && minute >0)
+                {
+                    second = 59;
+                    minute--;
+                }
+                sprintf(string_shown_on_lcd, "%2d:%2d", minute, second);
+                DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+            }
+		}
+	}
+}
+
+/******************************************************************************
+* Function Name: checkswitch
+* Description  : Check which switch was pressed
+* Arguments    : none
+* Return Value : none
+******************************************************************************/
+void checkswitch (void)
+{
+    button = ChatDel();
+    //A button is pressed;
+    if((button != 0) && (button != 0x70)){
+        if (button == SWT1)
+        {
+            // Increment second
+            if (state == STATE0) // Setting
+            {
+                second++;
+                if (second > 59)
+                {
+                    second = 0;
+                }
+                sprintf(string2, "%2d:%2d", minute, second);
+                DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+            }
+            else{;}
+        }
+
+        else if (button == SWT2)
+        {
+            // Reset
+            if (state == STATE2) // Paused
+            {
+                state = STATE0; // Setting
+                second = 0;
+                minute = 0;
+            }
+
+            //Increment minute
+            else if (state == STATE0) // Setting
+            {
+                DisplayLCD(LCD_LINE1, "Setting...");
+                minute++;
+                if (minute > 59)
+                {
+                    minute = 0;
+                }
+                sprintf(string2, "%2d:%2d", minute, second);
+                DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+            }
+        }
+
+        else if (button == SWT3)
+        {
+            if (second == 0 && minute == 0)
+            {
+                state = STATE0; // Setting
+            }
+
+            //Paused
+            if (state == STATE1)
+            {
+                state = STATE2; // Paused
+            }
+
+            // Counting
+            else if (state == STATE2)
+            {
+                state = STATE1; // Counting
+            }
+        }
+    }
+}
+/******************************************************************************
+* Function Name: r_main_userinit
+* Description  : User initialization routine
+* Arguments    : none
+* Return Value : none
+******************************************************************************/
+void r_main_userinit(void)
+{
+	uint16_t i;
+
+	/* Enable interrupt */
+	EI();
+
+	/* Output a logic LOW level to external reset pin*/
+	P13_bit.no0 = 0;
+	for (i = 0; i < 1000; i++)
+	{
+		NOP();
+	}
+
+	/* Generate a raising edge by ouput HIGH logic level to external reset pin */
+	P13_bit.no0 = 1;
+	for (i = 0; i < 1000; i++)
+	{
+		NOP();
+	}
+
+	/* Output a logic LOW level to external reset pin, the reset is completed */
+	P13_bit.no0 = 0;
+
+	/* Initialize SPI channel used for LCD */
+	R_SPI_Init(SPI_LCD_CHANNEL);
+
+	/* Initialize Chip-Select pin for LCD-SPI: P145 (Port 14, pin 5) */
+	R_SPI_SslInit(
+		SPI_SSL_LCD,             /* SPI_SSL_LCD is the index defined in lcd.h */
+		(unsigned char *)&P14,   /* Select Port register */
+		(unsigned char *)&PM14,  /* Select Port mode register */
+		5,                       /* Select pin index in the port */
+		0,                       /* Configure CS pin active state, 0 means active LOW level  */
+		0                        /* Configure CS pin active mode, 0 means active per transfer */
+	);
+
+	/* Initialize LCD driver */
+	InitialiseLCD();
+}
+
+/******************************************************************************
+End of file
+******************************************************************************/
