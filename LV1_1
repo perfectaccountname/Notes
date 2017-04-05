@@ -15,9 +15,9 @@ volatile int G_elapsedTime = 0;   // Timer Counter
 /******************************************************************************
 Macro definitions
 ******************************************************************************/
-#define STATE0 0 // Setting...
-#define STATE1 1 // Counting...
-#define STATE2 2 // Paused...
+#define SETTING 0 // Setting...
+#define COUNTING 1 // Counting...
+#define PAUSED 2 // Paused...
 
 #define SWT1 0x40
 #define SWT2 0x10
@@ -29,8 +29,8 @@ Imported global variables and functions (from other files)
 /******************************************************************************
 Exported global variables and functions (to be accessed by other files)
 ******************************************************************************/
-unsigned int second = 50;
-unsigned int minute = 0;
+int second = 0;
+int minute = 0;
 
 unsigned int match = 0;
 unsigned int prev = 0x70;
@@ -75,22 +75,34 @@ void main(void)
 	while (1)
 	{
 		checkswitch()
-		if (state = STATE1)
+		if (state = COUNTING)
 		{
-            Wait1MiliSecond();
-            G_elapsedTime++;
-            if (G_elapsedTime >= 1000)
-            {
-                second--;
-                G_elapsedTime = G_elapsedTime - 1000;
-                if (second < 0 && minute >0)
-                {
-                    second = 59;
-                    minute--;
-                }
-                sprintf(string_shown_on_lcd, "%2d:%2d", minute, second);
-                DisplayLCD(LCD_LINE2, string_shown_on_lcd);
-            }
+			if (second == 0 && minute == 0)
+			{
+			DisplayLCD(LCD_LINE1, "Setting...");
+			state = SETTING; // Setting
+			}
+			else
+			{
+				Wait1MiliSecond();
+				G_elapsedTime++;
+				if (G_elapsedTime >= 1000)
+				{
+					second--;
+					G_elapsedTime = G_elapsedTime - 1000;
+					if (second < 0 && minute >0)
+					{
+						second = 59;
+						minute--;
+						if (minute < 0)
+						{
+							minute = 59;
+						}
+					}
+				sprintf(string_shown_on_lcd, "%2d:%2d", minute, second);
+				DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+				}
+            		}
 		}
 	}
 }
@@ -109,7 +121,7 @@ void checkswitch (void)
         if (button == SWT1)
         {
             // Increment second
-            if (state == STATE0) // Setting
+            if (state == SETTING) // Setting
             {
                 second++;
                 if (second > 59)
@@ -125,15 +137,15 @@ void checkswitch (void)
         else if (button == SWT2)
         {
             // Reset
-            if (state == STATE2) // Paused
+            if (state == PAUSED) // Paused
             {
-                state = STATE0; // Setting
+                state = SETTING; // Setting
                 second = 0;
                 minute = 0;
             }
 
             //Increment minute
-            else if (state == STATE0) // Setting
+            else if (state == SETTING) // Setting
             {
                 DisplayLCD(LCD_LINE1, "Setting...");
                 minute++;
@@ -148,21 +160,16 @@ void checkswitch (void)
 
         else if (button == SWT3)
         {
-            if (second == 0 && minute == 0)
-            {
-                state = STATE0; // Setting
-            }
-
             //Paused
-            if (state == STATE1)
+            if (state == COUNTING)
             {
-                state = STATE2; // Paused
+                state =PAUSED; // Paused
             }
 
             // Counting
-            else if (state == STATE2)
+            else if (state == PAUSED)
             {
-                state = STATE1; // Counting
+                state = COUNTING; // Counting
             }
         }
     }
