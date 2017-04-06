@@ -1,0 +1,22 @@
+int prevoutput = 0x70;
+int output = 0x70;
+int prev = 0x70;
+int current;
+int match_times = 0;
+
+int ClearChattering(void){
+prevoutput = output;
+current = (P7&0x70);
+	if(prev!=current){
+		match_times=0;
+		prev=current;
+	}
+	else{
+		match_times=match_times+1;
+		if(match_times>2){
+			match_times=0
+			output=current;
+		}
+	}
+  return (output ^ prevoutput) & (~output);
+}
