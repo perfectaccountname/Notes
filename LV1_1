@@ -167,7 +167,7 @@ void checkswitch (void)
             }
 
             // Counting
-            else if (state == PAUSED)
+            else if (state == PAUSED || state == SETTING)
             {
                 state = COUNTING; // Counting
             }
