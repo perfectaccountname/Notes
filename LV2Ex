@@ -1,0 +1,53 @@
+Embedded Software Final Exercise – Level 2 Page 1
+Level 2: Stopwatch
+0. Prerequisites
+ Finished Level 1
+1. Input
+ RL78/G14 RDK board
+ CubeSuite+ E2.02.00I
+ StarUML
+ Workspace: Common Workspace  Final Exercise  L2 (empty)
+ Requirements for this level (see Requirements below)
+2. Output
+ Sequence diagram (using StarUML)
+ Source code
+3. Task Description
+You are going to write a program simulating the function of a stopwatch. You will be using the 3 switches on the board to control the stopwatch. The time is displayed on LCD device and your final program will basically show something like the following:
+Embedded Software Final Exercise – Level 2 Page 2
+4. Requirements
+Detailed requirements of this task are described as below.
+4.1 LCD display
+ The first line of the LCD display will show a message which is:
+o “Running…” when the stopwatch is running
+o “Pausing…” when the stopwatch is in pausing state (see requirement 4.2)
+o “No record” (see requirement 4.2)
+o “First record” (see requirement 4.2)
+o “Last record” (see requirement 4.2)
+ The second line of the LCD display will show the time in the format of Minute:Second:Centisecond
+ The stopwatch is in pausing state right after a system reset
+4.2 Switches (SW)
+ SW3 is used to start the stopwatch from pausing.
+ SW3 is used to record elapsed time since the stopwatch has run. Elapsed time is stored in memory after each record and can be shown on the LCD:
+o A maximum number of the last 20 records can be saved in memory
+o The lines #3 - #8 of the LCD always show the last 6 records with the following format:
+ (LINE #3) #1: 0:15:40
+ (LINE #4) #2: 0:16:10
+ (LINE #5) #3: 0:25:30
+ (LINE #6) #4: 1:15:0
+ (LINE #7) #5: 1:20:20
+ (LINE #8) #6: 3:15:40
+ SW1 is used to scroll up the list of records shown on the LCD. When there is no more record to scroll up, the first line of the LCD will show a message “First record” in 2 seconds.
+ SW2 is used to scroll down the list of records shown on the LCD. When there is no more record to scroll down, the first line of the LCD will show a message “Last record” in 2 seconds.
+Embedded Software Final Exercise – Level 2 Page 3
+ When the list of records is being scrolled up or down, if SW3 is pressed to record a new elapsed time. This record will be shown on the LCD only when:
+o There is still an available line on the LCD, or
+o All the lines of the LCD are occupied but the last line (#8) is currently showing the last record (the last one recorded before pressing SW3)
+ When there is no record (e.g. the stopwatch is pausing just after a system reset), if SW1 or SW2 is pressed, the first line of the LCD will show a message “No record” in 2 seconds.
+ When the stopwatch is running, if both SW1 and SW2 are pressed at the same time, the stopwatch will be changed to pausing state. In this state, the time is not counted.
+ When the stopwatch is pausing, if both SW1 and SW2 are pressed at the same time, the stopwatch will be reset and in pausing state.
+4.3 Time management
+In this level 2, you are required to use “hardware timer” to manage the time (review Chapter 6).
+ Using 12-bit interval timer.
+4.4 Key input detection
+You are required to implement a code to detect the states of the switches. You should write a program implementing a reliable mechanism to remove the chattering phenomena.
+---END---
