@@ -1,0 +1,127 @@
+/***********************************************************************************************************************
+Includes
+***********************************************************************************************************************/
+#include "r_macro.h"  /* System macro and standard type definition */
+#include "r_spi_if.h" /* SPI driver interface */
+#include "lcd.h"      /* LCD driver interface */
+#include "Port.h"
+#include <string.h>
+#include "ChatDel.h"
+#include "checkswitch.h"
+
+
+/******************************************************************************
+Macro definitions
+******************************************************************************/
+#define SETTING 0 // Setting...
+#define RUNNING 1 // Running...
+#define PAUSED 2 // Paused...
+
+#define SWT1 0x40
+#define SWT2 0x10
+#define SWT3 0x20
+#define SWT12 0x50
+
+/******************************************************************************
+Imported global variables and functions (from other files)
+******************************************************************************/
+extern unsigned int button;
+extern uint8_t state;
+extern int second;
+extern int minute;
+extern char* string_shown_on_lcd[10];
+/******************************************************************************
+Private global variables and functions
+******************************************************************************/
+/******************************************************************************
+* Function Name: checkswitch
+* Description  : Check which switch was pressed. Change state.
+* Arguments    : none
+* Return Value : none
+******************************************************************************/
+void checkswitch (void)
+{
+    button = ChatDel();
+    //A button is pressed;
+    if((button != 0) && (button != 0x70)){
+        if (button == SWT1)
+        {
+            // Increment second
+            if (state == PAUSED) // Setting
+            {
+                second++;
+                if (second > 59)
+                {
+                    second = 0;
+                }
+                sprintf(string_shown_on_lcd, "%0.2d:%0.2d", minute, second);
+                DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+            }
+	    
+	    //Scroll up
+	    else if (state == RUNNING) // RUNNING
+            {
+                //Scroll up
+            }
+        }
+
+        else if (button == SWT2)
+        {
+
+            //Increment minute
+            if (state == PAUSED) // Setting
+            {
+                DisplayLCD(LCD_LINE1, "Setting...");
+                minute++;
+                if (minute > 59)
+                {
+                    minute = 0;
+                }
+                sprintf(string_shown_on_lcd, "%0.2d:%0.2d", minute, second);
+                DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+            }
+	    
+	    //Scroll down
+	    else if (state == RUNNING) // RUNNING
+            {
+                //Scroll down
+            }
+        }
+
+        else if (button == SWT3)
+        {
+            //Record
+            if (state == RUNNING)
+            {
+		//RECORD
+            }
+
+            // Counting
+            else if (state == PAUSED)
+            {
+		DisplayLCD(LCD_LINE1, "Running...");
+                state = RUNNING; // Counting
+            }
+	}
+	else if (button == SWT12)
+	{
+		//Paused
+		if (state == RUNNING)
+		{
+			DisplayLCD(LCD_LINE1, "Paused...");
+	                state = PAUSED; // Paused
+		}
+		
+		//Reset
+		else if (state == PAUSED)
+		{
+		DisplayLCD(LCD_LINE1, "Paused...");
+                state = PAUSED; // Paused
+                second = 0;
+                minute = 0;
+		sprintf(string_shown_on_lcd, "%0.2d:%0.2d", minute, second);
+                DisplayLCD(LCD_LINE2, string_shown_on_lcd);
+		}
+	}
+    }
+}
