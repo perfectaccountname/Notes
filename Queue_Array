@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 20
+
+/* Initialize Queue */
+typedef <Element's type> El_type;
+typedef struct Queue
+{
+El_type el[MAX];
+int front;
+int rear;
+} Queue;
+
+/* Check if a queue is empty */
+Eltype *initQ(Queue *q)
+{
+q = (Queue *)malloc(sizeof(Queue));
+if(q!= NULL) 
+{
+  q->front = -1;
+  q->rear = -1;
+}
+return q;
+}
+
+/* Check if a queue is full */
+int isFull(Queue q)
+{
+return (q.rear-q.front+1 == MAX);
+}
+
+/* Add a new element */
+void enQ(El_type new_el, Queue *q)
+{
+if(!isFull(q))
+{
+  if(isEmpty(q)) q->front = q->front+1;
+  q->rear = q->rear+1;
+  q->el[q->rear] = new_el;
+}
+else
+  printf("Queue is full.\n");
+}
+
+/* Delete an element */
+void deQ(Queue *q)
+{
+if(!isEmpty(q)) 
+ q->front = q->front+1;   
+else
+ printf("Queue is empty.\n");
+}
