@@ -44,7 +44,7 @@ if(empty_queue(*q))q->front=0;
 q->rear=(q->rear+1)%maxlength;
 q->data[q->rear]=x;    
 }
-else printf("Hang Day!");
+else printf("Full!");
 }
 
 /* Delete an element */
@@ -55,5 +55,5 @@ if(!empty_queue(*q))
 if(q->front==q->rear)makenull_queue(q);
 else q->front=(q->front+1)%maxlength;
 }
-else printf("Hang rong!");
+else printf("Empty!");
 }
