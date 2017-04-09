@@ -40,7 +40,7 @@ Private global variables and functions
 * Return Value : none
 ******************************************************************************/
 void checkswitch (void)
-{
+{	
     button = ChatDel();
     //A button is pressed;
     if((button != 0) && (button != 0x70)){
