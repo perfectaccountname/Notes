@@ -64,6 +64,8 @@ Macro definitions
 #define SWT1 0x40
 #define SWT2 0x10
 #define SWT3 0x20
+
+#define MAX 20
 /******************************************************************************
 Imported global variables and functions (from other files)
 ******************************************************************************/
@@ -88,6 +90,14 @@ void r_main_userinit(void);
 void checkswitch(void);
 void wait(int mode);
 
+typedef <Element's type> El_type;
+typedef struct Queue
+{
+El_type el[MAX];
+int front;
+int rear;
+} Queue;
+
 /******************************************************************************
 * Function Name: main
 * Description  : Main program
@@ -96,6 +106,7 @@ void wait(int mode);
 ******************************************************************************/
 void main(void)
 {
+
 	/* Initialize user system */
 	r_main_userinit();
 
@@ -211,7 +222,74 @@ void r_main_userinit(void)
 	/* Initialize LCD driver */
 	InitialiseLCD();
 }
+/******************************************************************************
+* Function Name: Eltype *initQ
+* Description  : Initialize Queue
+* Arguments    : none
+* Return Value : front and rear pointers of Queue
+******************************************************************************/
+Eltype *initQ(Queue *q)
+{
+q = (Queue *)malloc(sizeof(Queue));
+if(q!= NULL) 
+{
+  q->front = -1;
+  q->rear = -1;
+}
+return q;
+}
 
+/******************************************************************************
+* Function Name: int empty_queue
+* Description  : Check if a queue is empty
+* Arguments    : none
+* Return Value : front pointer
+******************************************************************************/
+int empty_queue(queue q)
+{
+DisplayLCD(LCD_LINE2, "No record");
+return q.front==-1;
+}
+
+/******************************************************************************
+* Function Name: enqueue
+* Description  : Add a new element
+* Arguments    : none
+* Return Value : none
+******************************************************************************/
+void enqueue(elementtype x,queue *q)
+{
+if(!full_queue(*q))
+{
+if(empty_queue(*q))q->front=0;
+q->rear=(q->rear+1)%maxlength;
+q->data[q->rear]=x;    
+}
+else printf("Full!");
+}
+
+/******************************************************************************
+* Function Name: dequeue
+* Description  : Delete an element
+* Arguments    : pointer
+* Return Value : none
+******************************************************************************/
+void dequeue(queue *q)
+{
+if(!empty_queue(*q))
+{
+if(q->front==q->rear)makenull_queue(q);
+else q->front=(q->front+1)%maxlength;
+}
+else printf("Empty!");
+}
+
+/******************************************************************************
+* Function Name: r_main_userinit
+* Description  : User initialization routine
+* Arguments    : none
+* Return Value : none
+******************************************************************************/
 /******************************************************************************
 End of file
 ******************************************************************************/
