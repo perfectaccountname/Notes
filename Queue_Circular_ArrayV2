@@ -1,3 +1,5 @@
+The queue is considered as a circular queue when the positions 0 and MAX-1 are adjacent. Any position before front is also after rear.
+
 See the logical circularity of the queue. Addition causes the increment in REAR. It means that when REAR reaches MAX-1 position then Increment in REAR causes REAR to reach at first position that is 0.
 
 if( rear  == MAX -1 )
