@@ -3,6 +3,14 @@
 
 #define MAX 20
 
+typedef <Element's type> El_type;
+typedef struct Queue
+{
+El_type el[MAX];
+int front;
+int rear;
+} Queue;
+
 /* Initialize Queue */
 Eltype *initQ(Queue *q)
 {
