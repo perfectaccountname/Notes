@@ -232,3 +232,20 @@ int main()
     printf("\n");
     return 0;   
 }
+
+
+
+    Inserted item : 10
+    Inserted item : 20
+    Inserted item : 30
+    Inserted item : 40
+    Inserted item : 50
+    Queue Overflow
+    Deleted item is : 10
+    Deleted item is : 20
+    Deleted item is : 30
+    Deleted item is : 40
+    Deleted item is : 50
+    Inserted item : 60
+    Deleted item is : 60
+    Queue Underflow
