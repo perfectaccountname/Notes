@@ -113,7 +113,7 @@ This algorithm is used to check queue is full or not.
 #define MAX 5
  
 /*Declaration of circular queue.*/
-typedef struct
+typedef struct CirQueue
 {
     int front   ;
     int rear    ;
