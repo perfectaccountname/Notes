@@ -22,6 +22,10 @@ Macro definitions
 #define SWT3 0x20
 #define SWT12 0x50
 
+#define DOWN 0
+#define UP 1
+#define REC 1
+
 /******************************************************************************
 Imported global variables and functions (from other files)
 ******************************************************************************/
@@ -30,6 +34,11 @@ extern uint8_t state;
 extern int second;
 extern int minute;
 extern char* string_shown_on_lcd[10];
+extern int scroll_flag;
+extern int rec_flag = 0;
+extern unsigned int rec_min;
+extern unsigned int rec_sec;
+extern unsigned int rec_10centisec;
 /******************************************************************************
 Private global variables and functions
 ******************************************************************************/
@@ -61,7 +70,8 @@ void checkswitch (void)
 	    //Scroll up
 	    else if (state == RUNNING) // RUNNING
             {
-                //Scroll up
+	    	if (
+                scroll_flag = UP;
             }
         }
 
@@ -84,7 +94,7 @@ void checkswitch (void)
 	    //Scroll down
 	    else if (state == RUNNING) // RUNNING
             {
-                //Scroll down
+                scroll_flag = DOWN;
             }
         }
 
@@ -93,7 +103,7 @@ void checkswitch (void)
             //Record
             if (state == RUNNING)
             {
-		//RECORD
+		rec_flag = REC;
             }
 
             // Counting
