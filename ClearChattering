@@ -16,6 +16,10 @@ current = (P7&0x70);
 		if(match_times>2){
 			match_times=0
 			output=current;
+			if (output == 0x20 && prevoutput != 0x20)
+			{
+				prevoutput = 0x70;
+			}
 		}
 	}
   return (output ^ prevoutput) & (~output);
